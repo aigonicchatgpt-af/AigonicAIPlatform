@@ -1,0 +1,1590 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=Poppins:wght@400;500;600;700;800&display=swap");
+
+/* =====================================================
+   ROOT COLORS
+===================================================== */
+
+:root{
+
+    --primary:#035e6c;
+    --primary-light:#013e4a;
+    --gold:#E29C21;
+    --gold-dark:#A26208;
+
+    --white:#ffffff;
+
+    --dark:#07111D;
+    --dark-2:#0A1F33;
+
+    --light-bg:#ffffff;
+
+    --transition:.35s ease;
+
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:72px;
+
+    z-index:9999;
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    transition:var(--transition);
+
+}
+
+/* =============================
+   LIGHT
+============================= */
+
+body[data-theme="light"] .navbar{
+
+    background:rgba(255,255,255,.95);
+
+    border-bottom:1px solid rgba(0,0,0,.06);
+
+    box-shadow:
+
+        0 10px 28px rgba(0,0,0,.05);
+
+}
+
+/* =============================
+   DARK
+============================= */
+
+body[data-theme="dark"] .navbar{
+
+    background:linear-gradient(
+        90deg,
+        #07111D,
+        #0B2035,
+        #07111D
+    );
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.navbar-container{
+
+    width:min(1320px,95%);
+
+    height:100%;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.navbar-logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+}
+
+.navbar-logo:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.navbar-logo img{
+
+    width:52px;
+
+    height:52px;
+
+    object-fit:contain;
+
+    transition:.35s;
+
+}
+
+.navbar-logo:hover img{
+
+    transform:rotate(-4deg) scale(1.06);
+
+}
+
+/* =====================================================
+   BRAND TEXT
+===================================================== */
+
+.logo-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.logo-text h2{
+
+    margin:0;
+
+    display:flex;
+
+    align-items:center;
+
+    font-family:"Orbitron",sans-serif;
+
+    font-size:34px;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    line-height:1;
+
+}
+
+/* =====================================================
+   AI
+===================================================== */
+
+.logo-ai{
+
+background: linear-gradient(
+    180deg,
+    oklch(73.54% 0.12502 196.805),
+    #01a4af,
+    #0397bd,
+    #079bbc,
+    #0193A9,
+    #00C7FF
+);
+.logo-dot{
+    color:#E29C21;
+}
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    text-shadow:
+
+        0 0 12px rgba(4, 128, 169, 0.45);
+
+}
+
+/* =====================================================
+   GONIC
+===================================================== */
+
+.logo-gonic{
+
+    background:linear-gradient(
+
+        180deg,
+
+        #FFFDF5,
+
+        #FFF3C8,
+
+        #FFE173,
+
+        #FFC93D,
+
+        #E29C21,
+
+        #A26208
+
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    text-shadow:
+
+        0 0 8px rgba(181, 136, 1, 0.25);
+
+}
+
+/* =====================================================
+   COMPANY NAME
+===================================================== */
+
+.logo-text p{
+
+    margin-top:3px;
+
+    font-family:"Poppins",sans-serif;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+}
+
+body[data-theme="light"] .logo-text p{
+
+    color:#475569;
+
+}
+
+body[data-theme="dark"] .logo-text p{
+
+    color:#F8FAFC;
+
+}
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+nav{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-left:55px;
+
+}
+
+nav ul{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:34px;
+
+    list-style:none;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+nav ul li{
+
+    position:relative;
+
+}
+
+nav a{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    height:72px;
+
+    padding:0 2px;
+
+    font-family:"Poppins",sans-serif;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    color:#64748B;
+
+    transition:.35s ease;
+
+}
+
+/* Light */
+
+body[data-theme="light"] nav a{
+
+    color:#475569;
+
+}
+
+/* Dark */
+
+body[data-theme="dark"] nav a{
+
+    color:#E2E8F0;
+
+}
+
+nav a:hover{
+
+    color:var(--primary);
+
+}
+
+/* ==========================
+   ACTIVE MENU
+========================== */
+
+nav a.active{
+
+    color:var(--primary);
+
+    font-weight:700;
+
+}
+
+/* Remove the long blue underline */
+
+nav a::after{
+
+    display:none;
+
+}
+
+/* Premium Active Indicator */
+
+nav a.active::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:10px;
+
+    transform:translateX(-50%);
+
+    width:28px;
+
+    height:4px;
+
+    border-radius:50px;
+
+    background:linear-gradient(
+        90deg,
+        var(--primary),
+        var(--primary-light)
+    );
+
+}
+
+/* Hover */
+
+nav a:hover::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:10px;
+
+    transform:translateX(-50%);
+
+    width:18px;
+
+    height:3px;
+
+    border-radius:50px;
+
+    background:rgba(0,213,255,.45);
+
+}
+
+/* =====================================================
+   RIGHT SIDE
+===================================================== */
+
+.navbar-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+/* =====================================================
+   THEME BUTTON
+===================================================== */
+
+.theme-toggle{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.35s;
+
+    background:#F1F5F9;
+
+    color:var(--primary);
+
+}
+
+body[data-theme="dark"] .theme-toggle{
+
+    background:rgba(255,255,255,.08);
+
+    color:#00D5FF;
+
+}
+
+.theme-toggle:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    transform:translateY(-3px);
+
+}
+
+/* =====================================================
+   LOGIN BUTTON
+===================================================== */
+
+.nav-login{
+
+    padding:11px 24px;
+
+    border-radius:14px;
+
+    border:2px solid var(--primary);
+
+    background:transparent;
+
+    color:var(--primary);
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+body[data-theme="dark"] .nav-login{
+
+    color:#EAFBFF;
+
+}
+
+.nav-login:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    transform:translateY(-2px);
+
+}
+
+/* =====================================================
+   CTA BUTTON
+===================================================== */
+
+.nav-cta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:12px 22px;
+
+    border-radius:14px;
+
+    background:linear-gradient(
+
+        135deg,
+
+        var(--primary),
+
+        var(--primary-light)
+
+    );
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    box-shadow:
+
+        0 15px 30px rgba(1,147,169,.28);
+
+    transition:.35s;
+
+}
+
+.nav-cta:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 18px 36px rgba(1,147,169,.35);
+
+}
+
+.nav-cta svg{
+
+    transition:.35s;
+
+}
+
+.nav-cta:hover svg{
+
+    transform:translateX(6px);
+
+}
+
+/* =====================================================
+   USER
+===================================================== */
+
+.nav-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:var(--gold);
+
+    font-weight:700;
+
+}
+
+.nav-user svg{
+
+    color:var(--primary);
+
+}
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+.nav-logout{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:var(--primary);
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+body[data-theme="dark"] .nav-logout{
+
+    color:#EAFBFF;
+
+}
+
+.nav-logout:hover{
+
+    background:rgba(226,156,33,.12);
+
+    color:var(--gold);
+
+}
+
+.nav-logout svg{
+
+    transition:.35s;
+
+}
+
+.nav-logout:hover svg{
+
+    transform:rotate(-12deg);
+
+}
+/* =====================================================
+   MOBILE OVERLAY
+===================================================== */
+
+.nav-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(6px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.35s ease;
+
+    z-index:998;
+
+}
+
+.nav-overlay.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+/* =====================================================
+   MENU BUTTON
+===================================================== */
+
+.menu-toggle{
+
+    display:none;
+
+    width:46px;
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+body[data-theme="light"] .menu-toggle{
+
+    background:#F3F7FB;
+
+    color:var(--primary);
+
+}
+
+body[data-theme="dark"] .menu-toggle{
+
+    background:rgba(255,255,255,.08);
+
+    color:#00D5FF;
+
+}
+
+.menu-toggle:hover{
+
+    transform:translateY(-2px);
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:860px){
+
+/* Hide Desktop Buttons */
+
+.navbar-actions>.theme-toggle,
+.navbar-actions>.nav-login,
+.navbar-actions>.nav-cta,
+.navbar-actions>.nav-user,
+.navbar-actions>.nav-logout{
+
+    display:none !important;
+
+}
+
+/* Mobile drawer controls */
+.nav-mobile-only .theme-toggle,
+.nav-mobile-only .nav-login,
+.nav-mobile-only .nav-cta,
+.nav-mobile-only .nav-user,
+.nav-mobile-only .nav-logout{
+
+    display:flex !important;
+    width:100%;
+    justify-content:center;
+    align-items:center;
+}
+
+.nav-mobile-only .theme-toggle{
+    height:50px;
+}
+
+
+.menu-toggle{
+
+    display:flex;
+
+}
+
+/* Sidebar */
+
+nav{
+
+    position:fixed;
+
+    top:14px;
+
+    right:-110%;
+
+    width:330px;
+
+    max-width:88vw;
+
+    height:calc(100vh - 28px);
+
+    margin:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    box-shadow:
+
+        -20px 0 60px rgba(0,0,0,.15);
+
+    transition:right .4s ease;
+
+    z-index:9999;
+
+}
+
+body[data-theme="dark"] nav{
+
+    background:#081826;
+
+}
+
+nav.nav-open{
+
+    right:14px;
+
+}
+
+/* Close Button */
+
+.nav-close{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:44px;
+
+    height:44px;
+
+    margin:18px 18px 8px auto;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:#EEF5FA;
+
+    color:#0193A9;
+
+}
+
+body[data-theme="dark"] .nav-close{
+
+    background:rgba(255,255,255,.08);
+
+    color:#fff;
+
+}
+
+/* Navigation */
+
+nav ul{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    padding:14px 18px;
+
+    margin:0;
+
+}
+
+nav ul li{
+
+    width:100%;
+
+}
+
+nav ul li a{
+
+    position:relative;
+
+    width:100%;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 18px;
+
+    border-radius:14px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+/* Remove underline */
+
+nav a::after{
+
+    display:none;
+
+}
+
+/* Hover */
+
+nav ul li a:hover{
+
+    background:rgba(1,147,169,.08);
+
+}
+
+/* Active */
+
+nav ul li a.active{
+
+    background:rgba(1,147,169,.12);
+
+    color:var(--primary);
+
+}
+
+/* Left Accent */
+
+nav ul li a.active::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:9px;
+
+    width:4px;
+
+    height:34px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+
+        180deg,
+
+        var(--primary),
+
+        var(--primary-light)
+
+    );
+
+}
+
+/* Bottom Buttons */
+
+.nav-mobile-only{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-top:auto;
+
+    padding:20px;
+
+    border-top:1px solid rgba(0,0,0,.08);
+
+}
+
+body[data-theme="dark"] .nav-mobile-only{
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.nav-mobile-only .nav-login,
+
+.nav-mobile-only .nav-cta{
+
+    display:flex;
+
+    justify-content:center;
+
+    width:100%;
+
+}
+
+}
+/* =====================================================
+   LARGE TABLETS
+===================================================== */
+
+@media (max-width:1200px){
+
+    .navbar-container{
+
+        width:95%;
+
+    }
+
+    nav{
+
+        margin-left:30px;
+
+    }
+
+    nav ul{
+
+        gap:24px;
+
+    }
+
+    .logo-text h2{
+
+        font-size:30px;
+
+    }
+
+    .logo-text p{
+
+        font-size:8px;
+
+        letter-spacing:2px;
+
+    }
+
+}
+
+/* =====================================================
+   TABLETS
+===================================================== */
+
+@media (max-width:992px){
+
+    .navbar{
+
+        height:70px;
+
+    }
+
+    .navbar-container{
+
+        padding:0 18px;
+
+    }
+
+    nav{
+
+        margin-left:18px;
+
+    }
+
+    nav ul{
+
+        gap:18px;
+
+    }
+
+    nav a{
+
+        font-size:14px;
+
+    }
+
+    .theme-toggle{
+
+        width:42px;
+
+        height:42px;
+
+    }
+
+    .nav-login{
+
+        padding:10px 18px;
+
+    }
+
+    .nav-cta{
+
+        padding:11px 20px;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width:860px){
+
+    .navbar{
+
+        height:72px;
+
+    }
+
+    .navbar-container{
+
+        width:100%;
+
+        padding:0 16px;
+
+    }
+
+    .navbar-logo{
+
+        gap:10px;
+
+    }
+
+    .navbar-logo img{
+
+        width:46px;
+
+        height:46px;
+
+    }
+
+    .logo-text h2{
+
+        font-size:24px;
+
+    }
+
+    .logo-text p{
+
+        font-size:7px;
+
+        letter-spacing:1.6px;
+
+    }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width:480px){
+
+    .navbar{
+
+        height:70px;
+
+    }
+
+    .navbar-container{
+
+        padding:0 14px;
+
+    }
+
+    .navbar-logo img{
+
+        width:42px;
+
+        height:42px;
+
+    }
+
+    .logo-text h2{
+
+        font-size:20px;
+
+    }
+
+    .logo-text p{
+
+        font-size:6px;
+
+        letter-spacing:1px;
+
+    }
+
+    nav{
+
+        width:92vw;
+
+        max-width:340px;
+
+        border-radius:20px;
+
+    }
+
+    nav ul{
+
+        padding:12px 14px;
+
+    }
+
+    nav ul li a{
+
+        height:48px;
+
+        padding:0 16px;
+
+        font-size:14px;
+
+    }
+
+    .nav-mobile-only{
+
+        padding:16px;
+
+    }
+
+}
+
+/* =====================================================
+   VERY SMALL DEVICES
+===================================================== */
+
+@media (max-width:360px){
+
+    .logo-text h2{
+
+        font-size:18px;
+
+    }
+
+    .logo-text p{
+
+        display:none;
+
+    }
+
+    .navbar-logo img{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+    nav{
+
+        width:94vw;
+
+    }
+
+}
+
+/* =====================================================
+   DESKTOP ONLY
+===================================================== */
+
+@media (min-width:861px){
+
+    .menu-toggle{
+
+        display:none !important;
+
+    }
+
+    .nav-close{
+
+        display:none !important;
+
+    }
+
+    .nav-mobile-only{
+
+        display:none !important;
+
+    }
+
+    .nav-overlay{
+
+        display:none;
+
+    }
+
+}
+/* =====================================================
+   GLOBAL SMOOTHNESS
+===================================================== */
+
+*,
+*::before,
+*::after{
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    overflow-x:hidden;
+
+    font-family:"Poppins",sans-serif;
+
+}
+
+/* =====================================================
+   GLOBAL TRANSITIONS
+===================================================== */
+
+.navbar,
+.navbar-logo,
+.navbar-logo img,
+.logo-ai,
+.logo-gonic,
+nav,
+nav a,
+.theme-toggle,
+.nav-login,
+.nav-cta,
+.menu-toggle,
+.nav-close,
+.nav-overlay,
+.nav-logout,
+.nav-user{
+
+    transition:all .35s ease;
+
+}
+
+/* =====================================================
+   LOGO HOVER
+===================================================== */
+
+.navbar-logo:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.navbar-logo:hover img{
+
+    transform:rotate(-5deg) scale(1.08);
+
+}
+
+.navbar-logo:hover .logo-ai{
+
+    filter:brightness(1.18);
+
+}
+
+.navbar-logo:hover .logo-gonic{
+
+    filter:brightness(1.15);
+
+}
+
+/* =====================================================
+   NAVIGATION HOVER
+===================================================== */
+
+nav a{
+
+    overflow:hidden;
+
+}
+
+nav a:hover{
+
+    transform:translateY(-1px);
+
+}
+
+nav a:active{
+
+    transform:scale(.98);
+
+}
+
+/* =====================================================
+   BUTTON HOVER
+===================================================== */
+
+.theme-toggle:hover,
+.menu-toggle:hover{
+
+    box-shadow:
+
+        0 10px 24px rgba(1,147,169,.25);
+
+}
+
+.nav-login:hover{
+
+    box-shadow:
+
+        0 10px 28px rgba(1,147,169,.20);
+
+}
+
+.nav-cta:hover{
+
+    box-shadow:
+
+        0 18px 40px rgba(1,147,169,.35);
+
+}
+
+.nav-logout:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* =====================================================
+   MOBILE DRAWER ANIMATION
+===================================================== */
+
+@media(max-width:860px){
+
+    nav{
+
+        will-change:right;
+
+    }
+
+    nav.nav-open{
+
+        animation:drawerSlide .35s ease;
+
+    }
+
+    @keyframes drawerSlide{
+
+        from{
+
+            opacity:.5;
+
+            transform:translateX(35px);
+
+        }
+
+        to{
+
+            opacity:1;
+
+            transform:translateX(0);
+
+        }
+
+    }
+
+}
+
+/* =====================================================
+   ACTIVE MENU TRANSITION
+===================================================== */
+
+nav ul li a.active{
+
+    transition:
+
+        background .35s ease,
+
+        color .35s ease,
+
+        transform .35s ease;
+
+}
+
+nav ul li a.active:hover{
+
+    transform:translateX(4px);
+
+}
+
+/* =====================================================
+   CTA ICON ANIMATION
+===================================================== */
+
+.nav-cta svg{
+
+    transition:transform .35s ease;
+
+}
+
+.nav-cta:hover svg{
+
+    transform:translateX(6px);
+
+}
+
+/* =====================================================
+   SCROLLBAR (Mobile Drawer)
+===================================================== */
+
+nav{
+
+    scrollbar-width:thin;
+
+    scrollbar-color:#0193A9 transparent;
+
+}
+
+nav::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+nav::-webkit-scrollbar-thumb{
+
+    background:#0193A9;
+
+    border-radius:10px;
+
+}
+
+nav::-webkit-scrollbar-track{
+
+    background:transparent;
+
+}
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+button:focus-visible,
+a:focus-visible{
+
+    outline:2px solid #00D5FF;
+
+    outline-offset:3px;
+
+    border-radius:10px;
+
+}
+
+/* =====================================================
+   REDUCE MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation:none !important;
+
+        transition:none !important;
+
+        scroll-behavior:auto !important;
+
+    }
+
+}

@@ -1,0 +1,91 @@
+Frequently Asked Questions
+
+Q: What does AIGONIC do?
+
+A:
+AIGONIC develops Artificial Intelligence solutions, AI software, AI automation, AI chatbots, and AI products.
+
+--------------------------------
+
+Q: Do you provide internships?
+
+A:
+Yes. We provide AI internships for students and freshers.
+
+--------------------------------
+
+Q: Do you provide AI training?
+
+A:
+Yes. We provide AI training for schools, colleges, companies, and individuals.
+
+--------------------------------
+
+Q: Do you develop custom AI software?
+
+A:
+Yes. We develop customized AI software based on business requirements.
+
+--------------------------------
+
+Q: How can I contact AIGONIC?
+
+A:
+Email: info@aigonic.ai
+Phone: +91 9344372201
+
+--------------------------------
+
+Q: Which technologies do you use?
+
+A:
+Python, FastAPI, React, Machine Learning, Deep Learning, Gemini AI, OpenAI, LangChain, Vector Database, MongoDB, SQL, Docker, and Cloud Technologies.
+
+--------------------------------
+
+Q: Can businesses implement AI?
+
+A:
+Yes. We help businesses automate workflows using AI and Agentic AI solutions.
+
+--------------------------------
+
+Q: Do you build AI Chatbots?
+
+A:
+Yes. We build AI chatbots for websites, WhatsApp, Telegram, and enterprise applications.
+
+--------------------------------
+
+Q: What industries do you serve?
+
+A:
+Healthcare, Education, Finance, Manufacturing, Retail, Logistics, Agriculture, Real Estate, Government, and Startups.
+
+Frequently Asked Questions
+
+Q. What does AIGONIC do?
+
+AIGONIC develops AI software, AI automation solutions, intelligent chatbots, and custom AI applications.
+
+Q. Do you provide internships?
+
+Yes.
+
+Q. Do you provide AI training?
+
+Yes.
+
+Q. Do you develop custom software?
+
+Yes.
+
+Q. How can I contact AIGONIC?
+
+You can contact us through email or phone.
+
+Q. Do you provide AI consulting?
+
+Yes.
+
+

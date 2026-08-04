@@ -1,0 +1,25 @@
+Internship Program
+
+Internships are available for students and fresh graduates.
+
+Domains
+
+Artificial Intelligence
+
+Machine Learning
+
+Python
+
+React
+
+FastAPI
+
+Full Stack Development
+
+Data Science
+
+Generative AI
+
+Students can apply through the Career Assistant.
+
+Internship duration depends on the selected program.

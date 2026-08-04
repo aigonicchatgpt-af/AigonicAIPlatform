@@ -1,0 +1,26 @@
+/* Home-only photographic background. Dark mode keeps the image prominent; light mode uses it as a subtle texture. */
+body[data-theme='dark'] .hero {
+  background-image:
+    linear-gradient(90deg, rgba(7, 13, 27, .78) 0%, rgba(7, 13, 27, .42) 48%, rgba(7, 13, 27, .18) 100%),
+    linear-gradient(180deg, rgba(7, 13, 27, .28), rgba(7, 13, 27, .55)),
+    url('../../assets/images/hero.png');
+  background-size: cover;
+  background-position: center;
+}
+
+body[data-theme='light'] .hero {
+  background-image:
+    linear-gradient(90deg, rgba(247, 249, 252, .94) 0%, rgba(247, 249, 252, .84) 42%, rgba(247, 249, 252, .58) 100%),
+    linear-gradient(180deg, rgba(247, 249, 252, .12), rgba(247, 249, 252, .42)),
+    url('../../assets/images/hero.png');
+  background-size: cover;
+  background-position: center;
+}
+
+body[data-theme='dark'] .hero::before { opacity: .16; }
+body[data-theme='light'] .hero::before { opacity: .16; }
+
+@media (max-width: 800px) {
+  body[data-theme='dark'] .hero { background-position: 62% center; }
+  body[data-theme='light'] .hero { background-position: 62% center; }
+}

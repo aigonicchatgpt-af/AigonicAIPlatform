@@ -1,0 +1,33 @@
+AI Courses
+
+Artificial Intelligence
+
+Machine Learning
+
+Deep Learning
+
+Python Programming
+
+Data Science
+
+Prompt Engineering
+
+Generative AI
+
+Agentic AI
+
+Computer Vision
+
+Natural Language Processing
+
+FastAPI
+
+React Development
+
+MERN Stack
+
+Corporate AI Training
+
+Offline Training
+
+Online Training
