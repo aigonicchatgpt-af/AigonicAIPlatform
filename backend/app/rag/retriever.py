@@ -6,7 +6,13 @@ import chromadb
 
 client = chromadb.PersistentClient(path="chroma_db")
 
-collection = client.get_collection("aigonic")
+# Create collection if it doesn't exist
+try:
+    collection = client.get_collection("aigonic")
+    print("✅ ChromaDB collection loaded.")
+except Exception:
+    print("⚠️ Collection not found. Creating new collection...")
+    collection = client.create_collection("aigonic")
 
 
 # ==========================================
@@ -30,42 +36,16 @@ def search(query: str, n_results: int = 5) -> str:
         metadatas = results.get("metadatas", [[]])[0]
 
         if not documents:
-            print("\n No documents found.\n")
+            print("\nNo documents found.\n")
             return ""
-
-        print("\n" + "=" * 60)
-        print("🔍 USER QUESTION")
-        print("=" * 60)
-        print(query)
-
-        print("\n RETRIEVED DOCUMENTS")
-        print("=" * 60)
 
         context_parts = []
 
         for i, doc in enumerate(documents):
-
-            source = ""
-
-            if i < len(metadatas):
-                source = metadatas[i].get("source", "Unknown")
-
-            print(f"\nResult {i+1}")
-            print(f"Source : {source}")
-            print("-" * 40)
-            print(doc)
-
             context_parts.append(doc)
 
-        print("=" * 60 + "\n")
-
-        context = "\n\n".join(context_parts)
-
-        return context
+        return "\n\n".join(context_parts)
 
     except Exception as e:
-
-        print("\n Retriever Error")
-        print(e)
-
+        print("Retriever Error:", e)
         return ""
