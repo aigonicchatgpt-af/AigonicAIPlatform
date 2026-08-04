@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import "./Contact.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ContactForm() {
 
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ function ContactForm() {
     email: "",
     message: ""
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,34 +22,42 @@ function ContactForm() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  console.log("Submit button clicked");
-  console.log(formData);
+    e.preventDefault();
 
-  try {
+    setLoading(true);
 
-    const response = await axios.post(
-      "http://127.0.0.1:8000/contact/",
-      formData
-    );
+    try {
 
-    console.log("Response:", response.data);
+      const response = await axios.post(
+        `${API_URL}/contact/`,
+        formData
+      );
 
-    alert(response.data.message);
+      alert(response.data.message);
 
-  } catch (error) {
+      setFormData({
+        name: "",
+        email: "",
+        message: ""
+      });
 
-    console.log("Axios Error:", error);
+    } catch (error) {
 
-    if (error.response) {
-      console.log(error.response.data);
+      console.error(error);
+
+      alert(
+        error.response?.data?.detail ||
+        "Failed to send enquiry."
+      );
+
+    } finally {
+
+      setLoading(false);
+
     }
 
-    alert("Failed to send enquiry.");
-
-  }
-};
+  };
 
   return (
     <section className="contact-section">
@@ -88,13 +100,14 @@ function ContactForm() {
             value={formData.message}
             onChange={handleChange}
             required
-          ></textarea>
+          />
 
           <button
             type="submit"
             className="primary-btn"
+            disabled={loading}
           >
-            Send Enquiry
+            {loading ? "Sending..." : "Send Enquiry"}
           </button>
 
         </form>

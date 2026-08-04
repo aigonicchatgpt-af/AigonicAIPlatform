@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import "./Contact.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,7 +32,7 @@ export default function ContactSection() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/contact/",
+        `${API_URL}/contact/`,
         formData
       );
 
@@ -43,7 +45,11 @@ export default function ContactSection() {
       });
     } catch (error) {
       console.error(error);
-      alert("Failed to send enquiry.");
+
+      alert(
+        error.response?.data?.detail ||
+        "Failed to send enquiry."
+      );
     } finally {
       setLoading(false);
     }
