@@ -13,7 +13,7 @@ load_dotenv()
 API_KEY = os.getenv("GOOGLE_API_KEY")
 
 if not API_KEY:
-    raise ValueError("❌ GOOGLE_API_KEY not found in .env")
+    raise ValueError(" GOOGLE_API_KEY not found in .env")
 
 print("✅ Gemini API Key Loaded Successfully")
 
@@ -24,61 +24,34 @@ print("✅ Gemini API Key Loaded Successfully")
 client = genai.Client(api_key=API_KEY)
 
 # ==========================================
-# Available Models
-# ==========================================
-
-MODELS = [
-    "models/gemini-3.6-flash",
-    "models/gemini-3.5-flash",
-    "models/gemini-flash-latest",
-    "models/gemini-3.5-flash-lite",
-    "models/gemini-2.0-flash",
-]
-
-# ==========================================
 # Ask Gemini
 # ==========================================
 
 def ask_gemini(prompt: str) -> str:
 
-    last_error = None
+    try:
 
-    for model in MODELS:
+        print("\n" + "=" * 70)
+        print("🤖 Calling Gemini 2.5 Flash")
+        print("=" * 70)
 
-        try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
 
-            print("\n" + "=" * 70)
-            print(f"🤖 Trying Gemini Model : {model}")
-            print("=" * 70)
+        if response.text:
+            print("✅ Gemini Response Received")
+            return response.text.strip()
 
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt,
-            )
+        return " Gemini returned an empty response."
 
-            if response.text:
-                print(f"✅ Response received from {model}")
-                return response.text.strip()
+    except Exception:
 
-            print(f"⚠ Empty response from {model}")
+        print("\n Gemini Error")
+        traceback.print_exc()
 
-        except Exception as e:
-
-            print(f"\n❌ {model} Failed")
-            traceback.print_exc()
-
-            last_error = e
-
-            continue
-
-    print("\n" + "=" * 70)
-    print("❌ ALL GEMINI MODELS FAILED")
-    print("=" * 70)
-
-    if last_error:
-        print(last_error)
-
-    return (
-        "⚠️ AIGONIC AI is temporarily unavailable.\n\n"
-        "Please try again later."
-    )
+        return (
+            " AIGONIC AI is temporarily unavailable.\n"
+            "Please try again later."
+        )
