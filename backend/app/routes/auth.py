@@ -63,7 +63,8 @@ def register(user: RegisterSchema):
         "otp": otp
     })
 
-    send_otp_email(user.email, otp)
+    #send_otp_email(user.email, otp)
+    print("OTP:", otp)
 
     return {
         "success": True,
