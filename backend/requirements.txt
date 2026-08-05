@@ -12,3 +12,5 @@ langchain==0.3.27
 langchain-community==0.3.27
 sentence-transformers==5.1.0
 PyMuPDF
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
