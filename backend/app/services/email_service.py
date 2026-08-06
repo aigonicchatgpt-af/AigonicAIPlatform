@@ -1,8 +1,9 @@
-from resend import Resend
+import resend
 
 from app.config import RESEND_API_KEY
 
-client = Resend(api_key=RESEND_API_KEY)
+# Set API Key
+resend.api_key = RESEND_API_KEY
 
 
 # ======================================================
@@ -11,59 +12,83 @@ client = Resend(api_key=RESEND_API_KEY)
 
 def send_otp_email(receiver_email: str, otp: str):
 
-    client.emails.send(
-        {
+    try:
+
+        resend.Emails.send({
+
             "from": "AIGONIC AI <onboarding@resend.dev>",
-            "to": [receiver_email],
+
+            "to": receiver_email,
+
             "subject": "AIGONIC AI - Email Verification OTP",
+
             "html": f"""
-            <div style="font-family:Arial">
+            <div style="font-family:Arial,sans-serif">
 
-                <h2>Email Verification</h2>
+                <h2>AIGONIC AI</h2>
 
-                <p>Your OTP is</p>
+                <p>Your Email Verification OTP is</p>
 
-                <h1>{otp}</h1>
+                <h1 style="letter-spacing:5px;">{otp}</h1>
 
-                <p>This OTP is valid for 5 minutes.</p>
+                <p>This OTP is valid for <b>5 minutes</b>.</p>
 
                 <p>Please do not share this OTP with anyone.</p>
 
                 <br>
 
-                <b>AIGONIC AI</b>
+                <p>Regards,<br><b>AIGONIC AI Team</b></p>
 
             </div>
             """
-        }
-    )
 
-    print("✅ OTP Email Sent")
+        })
+
+        print("✅ OTP Email Sent Successfully")
+
+    except Exception as e:
+
+        print("❌ RESEND ERROR:", str(e))
+        raise
 
 
 # ======================================================
 # CONTACT EMAIL
 # ======================================================
 
-def send_contact_email(name, email, message):
+def send_contact_email(name: str, email: str, message: str):
 
-    client.emails.send(
-        {
+    try:
+
+        resend.Emails.send({
+
             "from": "AIGONIC AI <onboarding@resend.dev>",
-            "to": ["aigonicinnovpvtltd@gmail.com"],   # Replace with your email
-            "subject": f"Contact Form - {name}",
+
+            "to": "aigonicinnovpvtltd@gmail.com",
+
+            "subject": f"New Contact Form - {name}",
+
             "html": f"""
-            <h2>New Contact Request</h2>
+            <div style="font-family:Arial,sans-serif">
 
-            <b>Name:</b> {name}<br>
+                <h2>New Contact Request</h2>
 
-            <b>Email:</b> {email}<br><br>
+                <p><b>Name:</b> {name}</p>
 
-            <b>Message:</b>
+                <p><b>Email:</b> {email}</p>
 
-            <p>{message}</p>
+                <p><b>Message:</b></p>
+
+                <p>{message}</p>
+
+            </div>
             """
-        }
-    )
 
-    print("✅ Contact Email Sent")
+        })
+
+        print("✅ Contact Email Sent Successfully")
+
+    except Exception as e:
+
+        print("❌ RESEND ERROR:", str(e))
+        raise
