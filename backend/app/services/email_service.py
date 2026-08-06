@@ -12,95 +12,53 @@ def send_otp_email(receiver_email: str, otp: str):
     body = f"""
 Hello,
 
-Your OTP for AIGONIC AI verification is:
+Your OTP is
 
 {otp}
 
 This OTP is valid for 5 minutes.
 
-Do not share this OTP with anyone.
+Do not share this OTP.
 
-Thank you,
-AIGONIC AI Team
+Regards,
+AIGONIC AI
 """
 
     message = MIMEMultipart()
+
     message["From"] = SMTP_EMAIL
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    message.attach(MIMEText(body, "plain"))
-
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
-
-    server.login(SMTP_EMAIL, SMTP_PASSWORD)
-
-    server.sendmail(
-        SMTP_EMAIL,
-        receiver_email,
-        message.as_string()
+    message.attach(
+        MIMEText(body, "plain")
     )
 
-    server.quit()
+    try:
 
+        server = smtplib.SMTP(
+            "smtp.gmail.com",
+            587
+        )
 
-def send_contact_email(name, email, message):
+        server.starttls()
 
-    mail_subject = "🚀 New AI Consultation Request"
+        server.login(
+            SMTP_EMAIL,
+            SMTP_PASSWORD
+        )
 
-    body = f"""
-====================================================
-            AIGONIC INNOVATIONS PVT LTD
-====================================================
+        server.sendmail(
+            SMTP_EMAIL,
+            receiver_email,
+            message.as_string()
+        )
 
-📩 New Enquiry Received
+        server.quit()
 
-----------------------------------------------------
+        print("Email Sent Successfully")
 
-👤 Client Name
-{name}
+    except Exception as e:
 
-📧 Work Email
-{email}
-
-💬 Requirement
-
-{message}
-
-----------------------------------------------------
-
-🕒 Status
-New Lead
-
-🌐 Source
-AiGONIC Website
-
-====================================================
-Please contact the client as soon as possible.
-====================================================
-"""
-
-    msg = MIMEMultipart()
-
-    msg["From"] = SMTP_EMAIL
-    msg["To"] = SMTP_EMAIL
-    msg["Subject"] = mail_subject
-
-    msg.attach(MIMEText(body, "plain"))
-
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
-
-    server.login(
-        SMTP_EMAIL,
-        SMTP_PASSWORD
-    )
-
-    server.sendmail(
-        SMTP_EMAIL,
-        SMTP_EMAIL,
-        msg.as_string()
-    )
-
-    server.quit()
+        print("SMTP ERROR :", str(e))
+        raise

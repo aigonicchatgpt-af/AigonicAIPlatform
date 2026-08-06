@@ -46,29 +46,49 @@ def register(user: RegisterSchema):
         password=hashed_password
     )
 
-    # User starts as unverified
     new_user["verified"] = False
 
     users_collection.insert_one(new_user)
 
-    # Generate OTP
     otp = generate_otp()
 
     otp_collection.delete_many(
         {"email": user.email}
     )
 
-    otp_collection.insert_one({
-        "email": user.email,
-        "otp": otp
-    })
+    otp_collection.insert_one(
+        {
+            "email": user.email,
+            "otp": otp
+        }
+    )
 
-    #send_otp_email(user.email, otp)
-    print("OTP:", otp)
+    try:
+        send_otp_email(
+            user.email,
+            otp
+        )
+
+    except Exception as e:
+
+        print("EMAIL ERROR:", str(e))
+
+        users_collection.delete_one(
+            {"email": user.email}
+        )
+
+        otp_collection.delete_many(
+            {"email": user.email}
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to send OTP Email : {str(e)}"
+        )
 
     return {
         "success": True,
-        "message": "Registration successful. OTP sent to your email."
+        "message": "Registration successful. OTP sent successfully."
     }
 
 # ==========================
