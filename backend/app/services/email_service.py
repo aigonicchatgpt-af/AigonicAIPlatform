@@ -1,125 +1,69 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from resend import Resend
 
-from app.config import SMTP_EMAIL, SMTP_PASSWORD
+from app.config import RESEND_API_KEY
+
+client = Resend(api_key=RESEND_API_KEY)
 
 
-# =====================================================
-# SEND OTP EMAIL
-# =====================================================
+# ======================================================
+# OTP EMAIL
+# ======================================================
+
 def send_otp_email(receiver_email: str, otp: str):
 
-    subject = "AIGONIC AI - Email Verification OTP"
+    client.emails.send(
+        {
+            "from": "AIGONIC AI <onboarding@resend.dev>",
+            "to": [receiver_email],
+            "subject": "AIGONIC AI - Email Verification OTP",
+            "html": f"""
+            <div style="font-family:Arial">
 
-    body = f"""
-Hello,
+                <h2>Email Verification</h2>
 
-Your OTP is:
+                <p>Your OTP is</p>
 
-{otp}
+                <h1>{otp}</h1>
 
-This OTP is valid for 5 minutes.
+                <p>This OTP is valid for 5 minutes.</p>
 
-Do not share this OTP with anyone.
+                <p>Please do not share this OTP with anyone.</p>
 
-Regards,
-AIGONIC AI
-"""
+                <br>
 
-    message = MIMEMultipart()
+                <b>AIGONIC AI</b>
 
-    message["From"] = SMTP_EMAIL
-    message["To"] = receiver_email
-    message["Subject"] = subject
-
-    message.attach(MIMEText(body, "plain"))
-
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-
-        server.login(
-            SMTP_EMAIL,
-            SMTP_PASSWORD
-        )
-
-        server.sendmail(
-            SMTP_EMAIL,
-            receiver_email,
-            message.as_string()
-        )
-
-        server.quit()
-
-        print("✅ OTP Email Sent Successfully")
-
-    except Exception as e:
-        print("❌ SMTP ERROR:", str(e))
-        raise
-
-
-# =====================================================
-# SEND CONTACT EMAIL
-# =====================================================
-def send_contact_email(name: str, email: str, message: str):
-
-    subject = f"New Contact Form Submission - {name}"
-
-    body = f"""
-A new contact request has been received.
-
-----------------------------------------
-
-Name:
-{name}
-
-Email:
-{email}
-
-Message:
-{message}
-
-----------------------------------------
-
-This email was sent automatically from the AIGONIC AI website.
-"""
-
-    contact_message = MIMEMultipart()
-
-    contact_message["From"] = SMTP_EMAIL
-    contact_message["To"] = SMTP_EMAIL
-    contact_message["Subject"] = subject
-
-    contact_message.attach(
-        MIMEText(body, "plain")
+            </div>
+            """
+        }
     )
 
-    try:
+    print("✅ OTP Email Sent")
 
-        server = smtplib.SMTP(
-            "smtp.gmail.com",
-            587
-        )
 
-        server.starttls()
+# ======================================================
+# CONTACT EMAIL
+# ======================================================
 
-        server.login(
-            SMTP_EMAIL,
-            SMTP_PASSWORD
-        )
+def send_contact_email(name, email, message):
 
-        server.sendmail(
-            SMTP_EMAIL,
-            SMTP_EMAIL,
-            contact_message.as_string()
-        )
+    client.emails.send(
+        {
+            "from": "AIGONIC AI <onboarding@resend.dev>",
+            "to": ["aigonicinnovpvtltd@gmail.com"],   # Replace with your email
+            "subject": f"Contact Form - {name}",
+            "html": f"""
+            <h2>New Contact Request</h2>
 
-        server.quit()
+            <b>Name:</b> {name}<br>
 
-        print("✅ Contact Email Sent Successfully")
+            <b>Email:</b> {email}<br><br>
 
-    except Exception as e:
+            <b>Message:</b>
 
-        print("❌ SMTP ERROR:", str(e))
-        raise
+            <p>{message}</p>
+            """
+        }
+    )
+
+    print("✅ Contact Email Sent")
