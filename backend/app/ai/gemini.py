@@ -3,48 +3,39 @@ import traceback
 from dotenv import load_dotenv
 from google import genai
 
-# ==========================================
-# Load Environment Variables
-# ==========================================
+# Load env
 load_dotenv()
 
 API_KEY = os.getenv("GOOGLE_API_KEY")
 
 if not API_KEY:
-    raise ValueError("❌ GOOGLE_API_KEY not found in environment variables")
+    raise ValueError("❌ GOOGLE_API_KEY not found")
 
-print("✅ Gemini API Key Loaded Successfully")
+print("✅ Gemini API Key Loaded")
 
-# ==========================================
-# Gemini Client
-# ==========================================
+# Gemini client
 client = genai.Client(api_key=API_KEY)
 
-# ==========================================
-# Ask Gemini Function
-# ==========================================
+# Ask Gemini
 def ask_gemini(prompt: str) -> str:
     try:
-        print("\n" + "=" * 70)
-        print("🤖 Calling Gemini 1.5 Flash")
-        print("=" * 70)
+        print("\n" + "=" * 50)
+        print("🤖 Calling Gemini")
+        print("=" * 50)
 
         response = client.models.generate_content(
-            model="gemini-1.5-flash",   # ✅ FIXED MODEL
+            model="gemini-1.5-flash",   # ✅ WORKING MODEL
             contents=prompt,
         )
 
         if response and response.text:
-            print("✅ Gemini Response Received")
+            print("✅ Response received")
             return response.text.strip()
 
-        return "⚠️ Gemini returned empty response."
+        return "⚠️ Empty response from AI"
 
     except Exception as e:
-        print("\n❌ Gemini Error:", str(e))
+        print("❌ Gemini Error:", str(e))
         traceback.print_exc()
 
-        return (
-            "🚫 AIGONIC AI is temporarily unavailable.\n"
-            "Please try again later."
-        )
+        return "🚫 AI is temporarily unavailable"
