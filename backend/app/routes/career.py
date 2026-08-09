@@ -8,7 +8,6 @@ from app.services.career_service import (
     apply_job,
     get_application,
     save_candidate_details,
-    # ❌ upload_resume removed (causing timeout)
 )
 
 router = APIRouter(
@@ -41,7 +40,17 @@ class CandidateRequest(BaseModel):
 
 @router.get("/jobs")
 def career_jobs():
-    return get_jobs()
+    try:
+        print("📡 Fetching jobs...")
+        return get_jobs()
+
+    except Exception as e:
+        print("❌ Jobs Error:", str(e))
+        traceback.print_exc()
+        return {
+            "success": False,
+            "message": "Failed to fetch jobs"
+        }
 
 
 # ======================================
@@ -51,41 +60,53 @@ def career_jobs():
 @router.post("/apply")
 def apply(request: ApplyRequest):
     try:
-        return apply_job(request.model_dump())
+        print("📩 Apply request:", request)
+
+        result = apply_job(request.model_dump())
+
+        return {
+            "success": True,
+            "data": result
+        }
 
     except Exception as e:
+        print("❌ Apply Error:", str(e))
         traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=str(e),
-        )
+        return {
+            "success": False,
+            "message": "Failed to apply job"
+        }
 
 
 # ======================================
-# SAVE CANDIDATE DETAILS
+# SAVE CANDIDATE DETAILS (🔥 IMPORTANT FIX)
 # ======================================
 
 @router.post("/details")
 def save_details(request: CandidateRequest):
     try:
+        print("📩 Candidate Data:", request)
+
         candidate_id = save_candidate_details(request.model_dump())
 
         return {
             "success": True,
-            "message": "Candidate details saved successfully.",
+            "message": "Candidate details saved successfully",
             "candidate_id": candidate_id,
         }
 
     except Exception as e:
+        print("❌ Career Details Error:", str(e))
         traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=str(e),
-        )
+
+        return {
+            "success": False,
+            "message": "Unable to save career details. Please try again."
+        }
 
 
 # ======================================
-# UPLOAD RESUME (🔥 FIXED - NO TIMEOUT)
+# UPLOAD RESUME
 # ======================================
 
 UPLOAD_DIR = "uploads"
@@ -100,7 +121,6 @@ async def upload_candidate_resume(
     try:
         print("🔥 Upload API HIT")
 
-        # Save file
         file_path = os.path.join(UPLOAD_DIR, resume.filename)
 
         with open(file_path, "wb") as f:
@@ -117,11 +137,13 @@ async def upload_candidate_resume(
         }
 
     except Exception as e:
+        print("❌ Upload Error:", str(e))
         traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=str(e),
-        )
+
+        return {
+            "success": False,
+            "message": "Resume upload failed"
+        }
 
 
 # ======================================
@@ -130,21 +152,27 @@ async def upload_candidate_resume(
 
 @router.get("/application/{application_id}")
 def application(application_id: str):
-
     try:
+        print("📡 Fetching application:", application_id)
+
         data = get_application(application_id)
 
         if data is None:
-            raise HTTPException(
-                status_code=404,
-                detail="Application not found",
-            )
+            return {
+                "success": False,
+                "message": "Application not found"
+            }
 
-        return data
+        return {
+            "success": True,
+            "data": data
+        }
 
     except Exception as e:
+        print("❌ Application Error:", str(e))
         traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=str(e),
-        )
+
+        return {
+            "success": False,
+            "message": "Failed to fetch application"
+        }
