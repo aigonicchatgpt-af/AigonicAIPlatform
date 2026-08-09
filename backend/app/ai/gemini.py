@@ -3,7 +3,10 @@ import traceback
 from dotenv import load_dotenv
 from google import genai
 
-# Load env
+# =====================================
+# LOAD ENV VARIABLES
+# =====================================
+
 load_dotenv()
 
 API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -13,22 +16,33 @@ if not API_KEY:
 
 print("✅ Gemini API Key Loaded")
 
-# Gemini client
+# =====================================
+# GEMINI CLIENT SETUP
+# =====================================
+
 client = genai.Client(api_key=API_KEY)
 
-# Ask Gemini
+# =====================================
+# ASK GEMINI FUNCTION
+# =====================================
+
 def ask_gemini(prompt: str) -> str:
     try:
         print("\n" + "=" * 50)
-        print("🤖 Calling Gemini")
+        print("🤖 Calling Gemini AI")
         print("=" * 50)
 
         response = client.models.generate_content(
-            model="gemini-1.5-flash",   # ✅ WORKING MODEL
+            model="gemini-1.5-flash-latest",   # ✅ LATEST WORKING MODEL
             contents=prompt,
+            config={
+                "temperature": 0.7,          # creativity
+                "max_output_tokens": 1024,   # response size
+            }
         )
 
-        if response and response.text:
+        # ✅ SAFE RESPONSE HANDLING
+        if response and hasattr(response, "text") and response.text:
             print("✅ Response received")
             return response.text.strip()
 
