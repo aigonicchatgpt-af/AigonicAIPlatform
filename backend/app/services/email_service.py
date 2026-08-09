@@ -1,5 +1,6 @@
 import resend
-
+import base64
+import os
 from app.config import RESEND_API_KEY
 
 # Set API Key
@@ -92,4 +93,28 @@ def send_contact_email(name: str, email: str, message: str):
 
         print("❌ RESEND ERROR:", str(e))
         raise
-    
+def send_resume_email(to_email, file_path, candidate):
+    with open(file_path, "rb") as f:
+        file_data = f.read()
+        encoded = base64.b64encode(file_data).decode()
+
+    resend.Emails.send({
+        "from": "onboarding@resend.dev",
+        "to": to_email,
+        "subject": "🚀 New Candidate Application",
+        "html": f"""
+        <h2>Candidate Details</h2>
+
+        <p><b>Name:</b> {candidate['name']}</p>
+        <p><b>Email:</b> {candidate['email']}</p>
+        <p><b>Mobile:</b> {candidate['mobile']}</p>
+        <p><b>Role:</b> {candidate['role']}</p>
+        <p><b>Experience:</b> {candidate['experience']}</p>
+        """,
+        "attachments": [
+            {
+                "filename": os.path.basename(file_path),
+                "content": encoded
+            }
+        ]
+    })

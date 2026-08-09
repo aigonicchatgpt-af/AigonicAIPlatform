@@ -2,9 +2,15 @@ from fastapi import APIRouter, UploadFile, File, Form
 from pydantic import BaseModel
 import traceback
 import os
-import smtplib
-from email.message import EmailMessage
 
+# ✅ RESEND
+import resend
+from app.config import RESEND_API_KEY
+
+# ✅ EMAIL SERVICE
+from app.services.email_service import send_resume_email
+
+# ✅ SERVICES
 from app.services.career_service import (
     get_jobs,
     apply_job,
@@ -12,64 +18,20 @@ from app.services.career_service import (
     save_candidate_details,
 )
 
+# ======================================
+# ROUTER
+# ======================================
+
 router = APIRouter(
     prefix="/career",
     tags=["Careers"],
 )
 
 # ======================================
-# ENV EMAIL CONFIG
+# RESEND CONFIG
 # ======================================
 
-EMAIL_USER = os.getenv("EMAIL_USER")
-EMAIL_PASS = os.getenv("EMAIL_PASS")
-
-# ======================================
-# EMAIL FUNCTION (FINAL)
-# ======================================
-
-def send_email_with_resume(to_email, file_path, candidate):
-    try:
-        print("📤 Email sending started...")
-
-        msg = EmailMessage()
-        msg["Subject"] = "🚀 New Candidate Application"
-        msg["From"] = EMAIL_USER
-        msg["To"] = to_email
-
-        msg.set_content(f"""
-New Candidate Applied:
-
-Name: {candidate['name']}
-Email: {candidate['email']}
-Mobile: {candidate['mobile']}
-Role: {candidate['role']}
-Experience: {candidate['experience']}
-""")
-
-        # Attach resume
-        with open(file_path, "rb") as f:
-            file_data = f.read()
-            file_name = os.path.basename(file_path)
-
-        msg.add_attachment(
-            file_data,
-            maintype="application",
-            subtype="pdf",
-            filename=file_name
-        )
-
-        # Send email
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login(EMAIL_USER, EMAIL_PASS)
-            smtp.send_message(msg)
-
-        print("📧 Email sent successfully ✅")
-
-    except Exception as e:
-        print("❌ Email Error:", str(e))
-        traceback.print_exc()
-
+resend.api_key = RESEND_API_KEY
 
 # ======================================
 # MODELS
@@ -89,7 +51,6 @@ class CandidateRequest(BaseModel):
     experience: str
     role: str
 
-
 # ======================================
 # GET JOBS
 # ======================================
@@ -104,7 +65,6 @@ def career_jobs():
         traceback.print_exc()
         return {"success": False}
 
-
 # ======================================
 # APPLY
 # ======================================
@@ -117,7 +77,6 @@ def apply(request: ApplyRequest):
     except Exception as e:
         print("❌ Apply Error:", str(e))
         return {"success": False}
-
 
 # ======================================
 # SAVE DETAILS
@@ -139,9 +98,8 @@ def save_details(request: CandidateRequest):
         print("❌ Career Details Error:", str(e))
         return {"success": False}
 
-
 # ======================================
-# UPLOAD RESUME + EMAIL (FINAL FIX)
+# UPLOAD RESUME + EMAIL
 # ======================================
 
 UPLOAD_DIR = "uploads"
@@ -160,6 +118,7 @@ async def upload_candidate_resume(
     try:
         print("🔥 Upload API HIT")
 
+        # Save file
         file_path = os.path.join(UPLOAD_DIR, resume.filename)
 
         with open(file_path, "wb") as f:
@@ -168,9 +127,9 @@ async def upload_candidate_resume(
 
         print("✅ File Saved:", file_path)
 
-        # ✅ DIRECT EMAIL CALL (NO THREAD)
-        send_email_with_resume(
-            to_email="aigonicinnovpvtltd@gmail.com",  # 👉 change if needed
+        # ✅ SEND EMAIL (CORRECT FUNCTION)
+        send_resume_email(
+            to_email="aigonicinnovpvtltd@gmail.com",
             file_path=file_path,
             candidate={
                 "name": name,
@@ -178,7 +137,7 @@ async def upload_candidate_resume(
                 "mobile": mobile,
                 "role": role,
                 "experience": experience,
-            },
+            }
         )
 
         return {
@@ -194,7 +153,6 @@ async def upload_candidate_resume(
             "success": False,
             "message": "Upload failed"
         }
-
 
 # ======================================
 # GET APPLICATION
