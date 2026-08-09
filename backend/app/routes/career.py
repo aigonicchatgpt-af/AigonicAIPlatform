@@ -157,6 +157,7 @@ def save_details(request: CandidateRequest):
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+import threading   # 🔥 ADD THIS
 
 @router.post("/upload-resume")
 async def upload_candidate_resume(
@@ -178,22 +179,29 @@ async def upload_candidate_resume(
 
         print("✅ File Saved:", file_path)
 
-        # 🔥 SEND EMAIL
-        send_email_with_resume(
-            to_email="yourhr@gmail.com",   # 👉 change this
-            file_path=file_path,
-            candidate={
-                "name": name,
-                "email": email,
-                "mobile": mobile,
-                "role": role,
-                "experience": experience
-            }
-        )
+        # =========================================
+        # 🔥 ASYNC EMAIL (BACKGROUND THREAD)
+        # =========================================
 
+        threading.Thread(
+            target=send_email_with_resume,
+            kwargs={
+                "to_email": "yourhr@gmail.com",  # 👉 change
+                "file_path": file_path,
+                "candidate": {
+                    "name": name,
+                    "email": email,
+                    "mobile": mobile,
+                    "role": role,
+                    "experience": experience,
+                },
+            },
+        ).start()
+
+        # 🔥 IMMEDIATE RESPONSE
         return {
             "success": True,
-            "message": "Resume uploaded & email sent"
+            "message": "Resume uploaded successfully ✅"
         }
 
     except Exception as e:
@@ -204,7 +212,6 @@ async def upload_candidate_resume(
             "success": False,
             "message": "Upload failed"
         }
-
 
 # ======================================
 # GET APPLICATION
