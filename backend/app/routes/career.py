@@ -1,20 +1,20 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 import traceback
+import os
 
 from app.services.career_service import (
     get_jobs,
     apply_job,
     get_application,
     save_candidate_details,
-    upload_resume,
+    # ❌ upload_resume removed (causing timeout)
 )
 
 router = APIRouter(
     prefix="/career",
     tags=["Careers"],
 )
-
 
 # ======================================
 # MODELS
@@ -85,8 +85,12 @@ def save_details(request: CandidateRequest):
 
 
 # ======================================
-# UPLOAD RESUME
+# UPLOAD RESUME (🔥 FIXED - NO TIMEOUT)
 # ======================================
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 @router.post("/upload-resume")
 async def upload_candidate_resume(
@@ -94,12 +98,22 @@ async def upload_candidate_resume(
     resume: UploadFile = File(...),
 ):
     try:
-        result = await upload_resume(email, resume)
+        print("🔥 Upload API HIT")
+
+        # Save file
+        file_path = os.path.join(UPLOAD_DIR, resume.filename)
+
+        with open(file_path, "wb") as f:
+            content = await resume.read()
+            f.write(content)
+
+        print("✅ File Saved:", file_path)
 
         return {
             "success": True,
-            "message": "Resume uploaded successfully.",
-            "data": result,
+            "message": "Resume uploaded successfully",
+            "file": resume.filename,
+            "email": email
         }
 
     except Exception as e:

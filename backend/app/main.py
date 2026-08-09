@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import db
-
 from app.routes.auth import router as auth_router
 from app.routes.chat import router as chat_router
 from app.routes import jobs, resume
@@ -15,6 +14,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# ✅ CORS FIXED
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -22,14 +22,15 @@ app.add_middleware(
         "https://aigonic-ai-platform.vercel.app",
     ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],   # ✅ correct
+    allow_headers=["*"],   # ✅ correct
 )
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to AIGONIC AI Backend"}
+    return {"message": "Welcome to AIGONIC AI Backend 🚀"}
 
+# ✅ Routers
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(career_router)

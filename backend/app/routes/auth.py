@@ -13,13 +13,14 @@ from app.utils.password import hash_password, verify_password
 from app.services.jwt_service import create_access_token
 from app.dependencies import get_current_user
 from app.utils.otp import generate_otp
-from app.services.email_service import send_otp_email
+
+# ❌ REMOVE email import for now
+# from app.services.email_service import send_otp_email
 
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
-
 
 # ==========================
 # Register
@@ -52,43 +53,19 @@ def register(user: RegisterSchema):
 
     otp = generate_otp()
 
-    otp_collection.delete_many(
-        {"email": user.email}
-    )
+    otp_collection.delete_many({"email": user.email})
 
-    otp_collection.insert_one(
-        {
-            "email": user.email,
-            "otp": otp
-        }
-    )
+    otp_collection.insert_one({
+        "email": user.email,
+        "otp": otp
+    })
 
-    try:
-        send_otp_email(
-            user.email,
-            otp
-        )
-
-    except Exception as e:
-
-        print("EMAIL ERROR:", str(e))
-
-        users_collection.delete_one(
-            {"email": user.email}
-        )
-
-        otp_collection.delete_many(
-            {"email": user.email}
-        )
-
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to send OTP Email : {str(e)}"
-        )
+    # ✅ IMPORTANT FIX (NO EMAIL)
+    print(f"✅ OTP for {user.email} is: {otp}")
 
     return {
         "success": True,
-        "message": "Registration successful. OTP sent successfully."
+        "message": "Registration successful. Check console for OTP."
     }
 
 # ==========================
@@ -97,9 +74,6 @@ def register(user: RegisterSchema):
 @router.post("/send-otp")
 def send_otp(data: ForgotPasswordSchema):
 
-    print("===== SEND OTP API =====")
-
-    # Check if email is already registered
     existing_user = users_collection.find_one(
         {"email": data.email}
     )
@@ -112,29 +86,19 @@ def send_otp(data: ForgotPasswordSchema):
 
     otp = generate_otp()
 
-    print("Generated OTP:", otp)
+    otp_collection.delete_many({"email": data.email})
 
-    otp_collection.delete_many(
-        {"email": data.email}
-    )
+    otp_collection.insert_one({
+        "email": data.email,
+        "otp": otp
+    })
 
-    otp_collection.insert_one(
-        {
-            "email": data.email,
-            "otp": otp
-        }
-    )
-
-    send_otp_email(
-        data.email,
-        otp
-    )
+    print(f"✅ OTP for {data.email} is: {otp}")
 
     return {
         "success": True,
-        "message": "OTP Sent Successfully"
+        "message": "OTP Generated (Check console)"
     }
-
 
 # ==========================
 # Verify OTP
@@ -142,12 +106,10 @@ def send_otp(data: ForgotPasswordSchema):
 @router.post("/verify-otp")
 def verify_otp(data: VerifyOTPSchema):
 
-    otp_data = otp_collection.find_one(
-        {
-            "email": data.email,
-            "otp": data.otp
-        }
-    )
+    otp_data = otp_collection.find_one({
+        "email": data.email,
+        "otp": data.otp
+    })
 
     if not otp_data:
         raise HTTPException(
@@ -157,16 +119,10 @@ def verify_otp(data: VerifyOTPSchema):
 
     users_collection.update_one(
         {"email": data.email},
-        {
-            "$set": {
-                "verified": True
-            }
-        }
+        {"$set": {"verified": True}}
     )
 
-    otp_collection.delete_one(
-        {"email": data.email}
-    )
+    otp_collection.delete_one({"email": data.email})
 
     return {
         "success": True,
@@ -204,12 +160,10 @@ def login(user: LoginSchema):
             detail="Please verify your email before logging in."
         )
 
-    token = create_access_token(
-        {
-            "email": existing_user["email"],
-            "role": existing_user["role"]
-        }
-    )
+    token = create_access_token({
+        "email": existing_user["email"],
+        "role": existing_user["role"]
+    })
 
     return {
         "success": True,
@@ -222,7 +176,6 @@ def login(user: LoginSchema):
             "role": existing_user["role"]
         }
     }
-
 
 # ==========================
 # Profile
