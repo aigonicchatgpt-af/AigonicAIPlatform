@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form
 from pydantic import BaseModel
 import traceback
 import os
@@ -24,13 +24,14 @@ router = APIRouter(
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
 
-
 # ======================================
-# EMAIL FUNCTION (🔥 IMPORTANT)
+# EMAIL FUNCTION (FINAL)
 # ======================================
 
 def send_email_with_resume(to_email, file_path, candidate):
     try:
+        print("📤 Email sending started...")
+
         msg = EmailMessage()
         msg["Subject"] = "🚀 New Candidate Application"
         msg["From"] = EMAIL_USER
@@ -44,7 +45,7 @@ Email: {candidate['email']}
 Mobile: {candidate['mobile']}
 Role: {candidate['role']}
 Experience: {candidate['experience']}
-        """)
+""")
 
         # Attach resume
         with open(file_path, "rb") as f:
@@ -63,7 +64,7 @@ Experience: {candidate['experience']}
             smtp.login(EMAIL_USER, EMAIL_PASS)
             smtp.send_message(msg)
 
-        print("📧 Email sent successfully")
+        print("📧 Email sent successfully ✅")
 
     except Exception as e:
         print("❌ Email Error:", str(e))
@@ -101,7 +102,7 @@ def career_jobs():
     except Exception as e:
         print("❌ Jobs Error:", str(e))
         traceback.print_exc()
-        return {"success": False, "message": "Failed to fetch jobs"}
+        return {"success": False}
 
 
 # ======================================
@@ -111,16 +112,11 @@ def career_jobs():
 @router.post("/apply")
 def apply(request: ApplyRequest):
     try:
-        print("📩 Apply request:", request)
-
         result = apply_job(request.model_dump())
-
         return {"success": True, "data": result}
-
     except Exception as e:
         print("❌ Apply Error:", str(e))
-        traceback.print_exc()
-        return {"success": False, "message": "Failed to apply job"}
+        return {"success": False}
 
 
 # ======================================
@@ -136,28 +132,21 @@ def save_details(request: CandidateRequest):
 
         return {
             "success": True,
-            "message": "Candidate details saved successfully",
             "candidate_id": candidate_id,
         }
 
     except Exception as e:
         print("❌ Career Details Error:", str(e))
-        traceback.print_exc()
-
-        return {
-            "success": False,
-            "message": "Unable to save career details"
-        }
+        return {"success": False}
 
 
 # ======================================
-# UPLOAD RESUME + EMAIL
+# UPLOAD RESUME + EMAIL (FINAL FIX)
 # ======================================
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-import threading   # 🔥 ADD THIS
 
 @router.post("/upload-resume")
 async def upload_candidate_resume(
@@ -179,29 +168,22 @@ async def upload_candidate_resume(
 
         print("✅ File Saved:", file_path)
 
-        # =========================================
-        # 🔥 ASYNC EMAIL (BACKGROUND THREAD)
-        # =========================================
-
-        threading.Thread(
-            target=send_email_with_resume,
-            kwargs={
-                "to_email": "yourhr@gmail.com",  # 👉 change
-                "file_path": file_path,
-                "candidate": {
-                    "name": name,
-                    "email": email,
-                    "mobile": mobile,
-                    "role": role,
-                    "experience": experience,
-                },
+        # ✅ DIRECT EMAIL CALL (NO THREAD)
+        send_email_with_resume(
+            to_email="aigonicinnovpvtltd@gmail.com",  # 👉 change if needed
+            file_path=file_path,
+            candidate={
+                "name": name,
+                "email": email,
+                "mobile": mobile,
+                "role": role,
+                "experience": experience,
             },
-        ).start()
+        )
 
-        # 🔥 IMMEDIATE RESPONSE
         return {
             "success": True,
-            "message": "Resume uploaded successfully ✅"
+            "message": "Resume uploaded & email sent ✅"
         }
 
     except Exception as e:
@@ -213,6 +195,7 @@ async def upload_candidate_resume(
             "message": "Upload failed"
         }
 
+
 # ======================================
 # GET APPLICATION
 # ======================================
@@ -220,17 +203,13 @@ async def upload_candidate_resume(
 @router.get("/application/{application_id}")
 def application(application_id: str):
     try:
-        print("📡 Fetching application:", application_id)
-
         data = get_application(application_id)
 
         if data is None:
-            return {"success": False, "message": "Not found"}
+            return {"success": False}
 
         return {"success": True, "data": data}
 
     except Exception as e:
         print("❌ Application Error:", str(e))
-        traceback.print_exc()
-
-        return {"success": False, "message": "Error"}
+        return {"success": False}
